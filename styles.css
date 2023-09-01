@@ -1,5 +1,4 @@
-/*  your css code here. If applicable */
-
+/* Add your CSS styles here */
 
 .container {
     text-align: center;
@@ -34,16 +33,8 @@
     font-weight: bold;
 }
 
-#player1{
-	padding: 5px;
-	border: 1px solid red;
-}
-#player2{
-	padding: 5px;
-	border: 1px solid red;
-}
-
-#player1{
-	padding: 5px;
-	border: 1px solid red;
+/* Add styling for player inputs here */
+#player1, #player2 {
+    padding: 5px;
+    border: 1px solid red;
 }

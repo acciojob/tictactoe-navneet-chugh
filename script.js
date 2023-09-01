@@ -1,5 +1,3 @@
-//your JS code here. If required.
-
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById("submit");
     const startDiv = document.getElementById("start");
@@ -58,7 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
         for (const pattern of winPatterns) {
             const [a, b, c] = pattern;
             if (gameBoard[a] !== "" && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
-                messageDiv.textContent = `${currentPlayer === "X" ? player1Input.value : player2Input.value}, congratulations, you won!`;
+                const winningPlayer = currentPlayer === "X" ? player1Input.value : player2Input.value;
+                const message = `${winningPlayer} congratulations you won!`;
+                messageDiv.textContent = message;
                 gameOver = true;
             }
         }
