@@ -1,71 +1,169 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const submitButton = document.getElementById("submit");
-    const startDiv = document.getElementById("start");
-    const gameDiv = document.getElementById("game");
-    const messageDiv = document.querySelector(".message");
-    const player1Input = document.getElementById("player1");
-    const player2Input = document.getElementById("player2");
-    const cells = document.querySelectorAll(".cell");
-    let currentPlayer = "X";
-    let gameBoard = ["", "", "", "", "", "", "", "", ""];
-    let gameOver = false;
+//your JS code here. If required.
+// Start Game events and data changes
+const button = document.querySelectorAll('div>button');
+var player1, player2;
+button[0].addEventListener('click', submitFunc);
 
-    submitButton.addEventListener("click", startGame);
+function submitFunc() {
+    const player = document.querySelectorAll('div>input');
+    
+    player1 = player[0].value;
+    player2 = player[1].value;
+    if(player1&&player2) {
+        const inputCont = document.getElementById("input-cont");
+        const gridCont = document.getElementById("grid-cont");
+        inputCont.style.display = 'none';
+        gridCont.style.display = 'flex';
 
-    function startGame() {
-        const player1Name = player1Input.value.trim();
-        const player2Name = player2Input.value.trim();
+        gameStart();
+    }
+    else {
+        alert('Please enter both the player names');
+    }
+}
 
-        if (player1Name !== "" && player2Name !== "") {
-            startDiv.style.display = "none";
-            gameDiv.style.display = "block";
-            messageDiv.textContent = `${player1Name}, you're up!`;
+function gameStart() {
+    const subHeading = document.getElementsByClassName('message');
+    
+    subHeading[0].innerText = player1+", you're up";
+}
 
-            cells.forEach(cell => {
-                cell.addEventListener("click", cellClick);
-            });
-        } else {
-            alert("Please enter names for both players.");
+var turn = 0;
+var gameOn = true;
+var count = 0;
+
+const one = document.getElementById('1');
+const two = document.getElementById('2');
+const three = document.getElementById('3');
+const four = document.getElementById('4');
+const five = document.getElementById('5');
+const six = document.getElementById('6');
+const seven = document.getElementById('7');
+const eight = document.getElementById('8');
+const nine = document.getElementById('9');
+
+one.addEventListener('click', placeYourPick);
+two.addEventListener('click', placeYourPick);
+three.addEventListener('click', placeYourPick);
+four.addEventListener('click', placeYourPick);
+five.addEventListener('click', placeYourPick);
+six.addEventListener('click', placeYourPick);
+seven.addEventListener('click', placeYourPick);
+eight.addEventListener('click', placeYourPick);
+nine.addEventListener('click', placeYourPick);
+
+
+function placeYourPick(event) {
+    if(count!=9&&gameOn) {
+        let playerMark = 'o';
+        if(turn==0) {
+            playerMark = 'x'
         }
-    }
-
-    function cellClick(event) {
-        const cell = event.target;
-        const cellIndex = cell.id - 1;
-
-        if (gameBoard[cellIndex] === "" && !gameOver) {
-            cell.textContent = currentPlayer;
-            gameBoard[cellIndex] = currentPlayer;
-            checkWin();
-            togglePlayer();
-        }
-    }
-
-    function togglePlayer() {
-        currentPlayer = currentPlayer === "X" ? "O" : "X";
-        messageDiv.textContent = `${currentPlayer === "X" ? player1Input.value : player2Input.value}, you're up!`;
-    }
-
-    function checkWin() {
-        const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6] // Diagonals
-        ];
-
-        for (const pattern of winPatterns) {
-            const [a, b, c] = pattern;
-            if (gameBoard[a] !== "" && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
-                const winningPlayer = currentPlayer === "X" ? player1Input.value : player2Input.value;
-                const message = `${winningPlayer} congratulations you won!`;
-                messageDiv.textContent = message;
-                gameOver = true;
+        event.srcElement.innerText = playerMark;
+        count++;
+		const subHeading = document.getElementsByClassName('message');
+        let won = checkForWin();
+        if(won) {
+            gameOn = false;            
+            if(turn) {
+                subHeading[0].innerText = player2+" congratulations you won!";
+            }
+            else {
+                subHeading[0].innerText = player1+" congratulations you won!";           
             }
         }
-
-        if (!gameBoard.includes("") && !gameOver) {
-            messageDiv.textContent = "It's a draw!";
-            gameOver = true;
+		else {
+			
+			if(turn) {
+				subHeading[0].innerText = player1+", you're up";
+			}
+			else subHeading[0].innerText = player2+", you're up";
+		}
+        if(turn) {
+            turn = 0;
         }
+        else turn++;
     }
-});
+    else {
+        const subHeading = document.getElementsByClassName('message');
+        subHeading[0].innerText = "Game Completed, click on restart for a new game";        
+    }
+}
+function checkForWin() {
+    if(one.innerText=='x'&&two.innerText=='x'&&three.innerText=='x') {
+        return true;
+    }
+    if(one.innerText=='x'&&four.innerText=='x'&&seven.innerText=='x') {
+        return true;
+    }
+    if(four.innerText=='x'&&five.innerText=='x'&&six.innerText=='x') {
+        return true;
+    }
+    if(seven.innerText=='x'&&eight.innerText=='x'&&nine.innerText=='x') {
+        return true;
+    }
+    if(five.innerText=='x'&&two.innerText=='x'&&eight.innerText=='x') {
+        return true;
+    }
+    if(six.innerText=='x'&&nine.innerText=='x'&&three.innerText=='x') {
+        return true;
+    }
+    if(one.innerText=='x'&&five.innerText=='x'&&nine.innerText=='x') {
+        return true;
+    }
+    if(three.innerText=='x'&&five.innerText=='x'&&seven.innerText=='x') {
+        return true;
+    }
+    
+    if(one.innerText=='o'&&two.innerText=='o'&&three.innerText=='o') {
+        return true;
+    }
+    if(one.innerText=='o'&&four.innerText=='o'&&seven.innerText=='o') {
+        return true;
+    }
+    if(four.innerText=='o'&&five.innerText=='o'&&six.innerText=='o') {
+        return true;
+    }
+    if(seven.innerText=='o'&&eight.innerText=='o'&&nine.innerText=='o') {
+        return true;
+    }
+    if(five.innerText=='o'&&two.innerText=='o'&&eight.innerText=='o') {
+        return true;
+    }
+    if(six.innerText=='o'&&nine.innerText=='o'&&three.innerText=='o') {
+        return true;
+    }
+    if(one.innerText=='o'&&five.innerText=='o'&&nine.innerText=='o') {
+        return true;
+    }
+    if(three.innerText=='o'&&five.innerText=='o'&&seven.innerText=='o') {
+        return true;
+    }
+    return false;
+}
+
+button[1].addEventListener('click', clearBoard);
+button[2].addEventListener('click',restartGame);
+
+function clearBoard() {
+    count = 0;
+    one.innerText = '';
+    two.innerText = '';
+    three.innerText = '';
+    four.innerText = '';
+    five.innerText = '';
+    six.innerText = '';
+    seven.innerText = '';
+    eight.innerText = '';
+    nine.innerText = '';
+    turn = 0;
+    gameOn = true;
+}
+
+function restartGame() {
+    const inputCont = document.getElementById("input-cont");
+    const gridCont = document.getElementById("grid-cont");
+    inputCont.style.display = 'block';
+    gridCont.style.display = 'none';
+    clearBoard();
+}
